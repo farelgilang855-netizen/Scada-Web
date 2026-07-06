@@ -4,10 +4,12 @@
   --panel-border: rgba(255, 255, 255, 0.1);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --accent: #f59e0b; /* Firebase Yellowish-Orange accent */
-  --accent-glow: rgba(245, 158, 11, 0.4);
+  --accent: #3b82f6; 
+  --accent-glow: rgba(59, 130, 246, 0.4);
   --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.6);
   --danger: #ef4444;
+  --led-off: #334155;
 }
 
 * {
@@ -20,8 +22,8 @@
 body {
   background-color: var(--bg-color);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
@@ -32,13 +34,12 @@ body {
 
 .dashboard-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-/* Glassmorphism utility */
 .glass-panel {
   background: var(--panel-bg);
   backdrop-filter: blur(12px);
@@ -47,15 +48,8 @@ body {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.glass-panel:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
-}
-
-/* Header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -76,8 +70,13 @@ h1 {
 h2 {
   font-weight: 600;
   font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  color: var(--text-main);
+}
+
+.subtitle {
+  font-size: 0.85rem;
   color: var(--text-muted);
+  margin-bottom: 1.5rem;
 }
 
 /* Status Indicator */
@@ -95,54 +94,58 @@ h2 {
   border-radius: 50%;
 }
 
-.connected {
-  background-color: var(--success);
-  box-shadow: 0 0 10px var(--success);
-}
-
-.disconnected {
-  background-color: var(--danger);
-  box-shadow: 0 0 10px var(--danger);
-}
+.connected { background-color: var(--success); box-shadow: 0 0 10px var(--success); }
+.disconnected { background-color: var(--danger); box-shadow: 0 0 10px var(--danger); }
 
 /* Grid Layout */
 .grid-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
   gap: 2rem;
 }
 
-.chart-widget {
-  grid-column: 1 / -1;
+@media (max-width: 768px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Sensor Cards */
-.sensor-cards, .control-cards {
-  display: flex;
-  flex-direction: column;
+/* Indicator & Control Grids */
+.indicator-grid, .control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.sensor-card, .control-card {
+.io-item {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 1.2rem;
+  padding: 1rem;
   border-radius: 12px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
-.sensor-card .label, .control-card .label {
+.io-label {
   font-weight: 600;
   color: var(--text-muted);
+  font-size: 1rem;
 }
 
-.sensor-card .value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--accent);
+/* LED Design */
+.led {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--led-off);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
+}
+
+.led.on {
+  background-color: var(--success);
+  box-shadow: 0 0 15px var(--success-glow), inset 0 2px 4px rgba(255,255,255,0.4);
 }
 
 /* Toggle Switch */
@@ -168,6 +171,7 @@ h2 {
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.1);
   transition: .4s;
+  border-radius: 34px;
 }
 
 .slider:before {
@@ -179,6 +183,7 @@ h2 {
   bottom: 4px;
   background-color: white;
   transition: .4s;
+  border-radius: 50%;
 }
 
 input:checked + .slider {
@@ -188,19 +193,4 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(22px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-/* Chart Container */
-.chart-container {
-  position: relative;
-  height: 300px;
-  width: 100%;
 }

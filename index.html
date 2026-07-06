@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCADA Dashboard - Firebase Edition</title>
+  <title>Generic SCADA I/O Panel</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <!-- Load Chart.js for graphs -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
     <header class="glass-panel header">
-      <h1><span class="highlight">SCADA</span> Web Cloud</h1>
+      <h1><span class="highlight">SCADA</span> I/O Panel</h1>
       <div class="status-indicator">
         <div id="connection-dot" class="dot disconnected"></div>
         <span id="connection-status">Connecting to Firebase...</span>
@@ -20,53 +18,26 @@
     </header>
 
     <main class="grid-layout">
-      <!-- Sensor Data Section -->
-      <section class="glass-panel widget">
-        <h2>Live Data Monitor</h2>
-        <div class="sensor-cards">
-          <div class="sensor-card">
-            <span class="label">Sensor 1 (Temp)</span>
-            <span class="value" id="val-sensor1">-- <small>°C</small></span>
-          </div>
-          <div class="sensor-card">
-            <span class="label">Sensor 2 (Pressure)</span>
-            <span class="value" id="val-sensor2">-- <small>bar</small></span>
-          </div>
+      <!-- 10 Lampu Indikator Section -->
+      <section class="glass-panel widget io-panel">
+        <h2>Output PLC (Indikator)</h2>
+        <p class="subtitle">Membaca Modbus Register 0 - 9</p>
+        <div class="indicator-grid" id="indicator-container">
+          <!-- Digenerate oleh app.js -->
         </div>
       </section>
 
-      <!-- Control Panel Section -->
-      <section class="glass-panel widget control-panel">
-        <h2>Control Panel</h2>
-        <div class="control-cards">
-          <div class="control-card">
-            <span class="label">PLC Relay 1</span>
-            <label class="switch">
-              <input type="checkbox" id="toggle-ctrl1">
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div class="control-card">
-            <span class="label">PLC Relay 2</span>
-            <label class="switch">
-              <input type="checkbox" id="toggle-ctrl2">
-              <span class="slider round"></span>
-            </label>
-          </div>
-        </div>
-      </section>
-
-      <!-- Chart Section -->
-      <section class="glass-panel widget chart-widget">
-        <h2>Real-time Trend</h2>
-        <div class="chart-container">
-          <canvas id="trendChart"></canvas>
+      <!-- 10 Saklar Control Section -->
+      <section class="glass-panel widget io-panel">
+        <h2>Input PLC (Kontrol)</h2>
+        <p class="subtitle">Menulis Modbus Register 10 - 19</p>
+        <div class="control-grid" id="control-container">
+          <!-- Digenerate oleh app.js -->
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Memanggil script aplikasi sebagai modul untuk fitur import Firebase -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
