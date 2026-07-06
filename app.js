@@ -6,13 +6,13 @@ import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebase
 // ==========================================
 // TODO: Replace with your actual Firebase project config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB0EDOtTMEF41_lB2CMQSmuuxpwvefvd2Q",
+  authDomain: "scada-7904a.firebaseapp.com",
+  databaseURL: "https://scada-7904a-default-rtdb.firebaseio.com",
+  projectId: "scada-7904a",
+  storageBucket: "scada-7904a.firebasestorage.app",
+  messagingSenderId: "91214446795",
+  appId: "1:91214446795:web:3eb12dd023f3f5dd55db4e"
 };
 
 // Initialize Firebase
