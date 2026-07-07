@@ -10,6 +10,9 @@
   --success-glow: rgba(16, 185, 129, 0.6);
   --danger: #ef4444;
   --led-off: #334155;
+  --btn-bg: #1e293b;
+  --btn-hover: #334155;
+  --btn-active: #3b82f6;
 }
 
 * {
@@ -104,6 +107,10 @@ h2 {
   gap: 2rem;
 }
 
+.chart-widget {
+  grid-column: 1 / -1; /* Span across full width */
+}
+
 @media (max-width: 768px) {
   .grid-layout {
     grid-template-columns: 1fr;
@@ -148,49 +155,33 @@ h2 {
   box-shadow: 0 0 15px var(--success-glow), inset 0 2px 4px rgba(255,255,255,0.4);
 }
 
-/* Toggle Switch */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 28px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+/* Pushbutton Design */
+.pushbutton {
+  background-color: var(--btn-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: .4s;
-  border-radius: 34px;
+  transition: all 0.1s ease;
+  user-select: none; /* Prevent text selection on rapid clicking */
+  -webkit-user-select: none;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
+.pushbutton:hover {
+  background-color: var(--btn-hover);
 }
 
-input:checked + .slider {
-  background-color: var(--accent);
+.pushbutton:active, .pushbutton.active {
+  background-color: var(--btn-active);
   box-shadow: 0 0 15px var(--accent-glow);
+  transform: scale(0.95);
 }
 
-input:checked + .slider:before {
-  transform: translateX(22px);
+/* Chart Container */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
 }

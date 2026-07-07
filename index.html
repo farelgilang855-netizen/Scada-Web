@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generic SCADA I/O Panel</title>
+  <title>SCADA Dashboard - Cloud Edition</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
     <header class="glass-panel header">
-      <h1><span class="highlight">SCADA</span> I/O Panel</h1>
+      <h1><span class="highlight">SCADA</span> Dashboard</h1>
       <div class="status-indicator">
         <div id="connection-dot" class="dot disconnected"></div>
         <span id="connection-status">Connecting to Firebase...</span>
@@ -21,18 +22,27 @@
       <!-- 10 Lampu Indikator Section -->
       <section class="glass-panel widget io-panel">
         <h2>Output PLC (Indikator)</h2>
-        <p class="subtitle">Membaca Modbus Register 0 - 9</p>
+        <p class="subtitle">Modbus Address 0 - 9</p>
         <div class="indicator-grid" id="indicator-container">
           <!-- Digenerate oleh app.js -->
         </div>
       </section>
 
-      <!-- 10 Saklar Control Section -->
+      <!-- 5 Pushbutton Control Section -->
       <section class="glass-panel widget io-panel">
-        <h2>Input PLC (Kontrol)</h2>
-        <p class="subtitle">Menulis Modbus Register 10 - 19</p>
+        <h2>Input PLC (Pushbutton)</h2>
+        <p class="subtitle">Modbus Address 10 - 14</p>
         <div class="control-grid" id="control-container">
           <!-- Digenerate oleh app.js -->
+        </div>
+      </section>
+
+      <!-- Analog Chart Section -->
+      <section class="glass-panel widget chart-widget">
+        <h2>Analog Monitor (Suhu / Potensio)</h2>
+        <p class="subtitle">Modbus Address 15 - 16</p>
+        <div class="chart-container">
+          <canvas id="trendChart"></canvas>
         </div>
       </section>
     </main>

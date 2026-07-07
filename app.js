@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // ==========================================
-// 2. DYNAMIC UI GENERATION
+// 2. DYNAMIC UI GENERATION & CHART
 // ==========================================
 const indicatorContainer = document.getElementById('indicator-container');
 const controlContainer = document.getElementById('control-container');
@@ -34,19 +34,58 @@ for (let i = 1; i <= 10; i++) {
   indicatorContainer.appendChild(item);
 }
 
-// Generate 10 Saklar Kontrol (SW1 - SW10)
-for (let i = 1; i <= 10; i++) {
+// Generate 5 Pushbuttons (BTN1 - BTN5)
+for (let i = 1; i <= 5; i++) {
   const item = document.createElement('div');
   item.className = 'io-item';
   item.innerHTML = `
-    <span class="io-label">Saklar ${i}</span>
-    <label class="switch">
-      <input type="checkbox" id="switch-SW${i}">
-      <span class="slider"></span>
-    </label>
+    <span class="io-label">Tombol ${i}</span>
+    <button class="pushbutton" id="btn-BTN${i}">TEKAN</button>
   `;
   controlContainer.appendChild(item);
 }
+
+// Chart Initialization
+const ctx = document.getElementById('trendChart').getContext('2d');
+const trendChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: 'Analog 1 (Suhu/Potensio)',
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 0,
+        data: []
+      },
+      {
+        label: 'Analog 2',
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 0,
+        data: []
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    scales: {
+      x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+      y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' }, beginAtZero: true }
+    },
+    plugins: { legend: { labels: { color: '#f8fafc' } } }
+  }
+});
+const MAX_DATA_POINTS = 30;
 
 // ==========================================
 // 3. FIREBASE SYNC LOGIC
@@ -71,33 +110,62 @@ onValue(ref(db, 'SCADA/Indicators'), (snapshot) => {
   if (data) {
     for (let i = 1; i <= 10; i++) {
       const led = document.getElementById(`led-L${i}`);
-      const val = data[`L${i}`];
-      if (val === 1) {
-        led.classList.add('on');
-      } else {
-        led.classList.remove('on');
+      if (led && data[`L${i}`] !== undefined) {
+        if (data[`L${i}`] === 1) led.classList.add('on');
+        else led.classList.remove('on');
       }
     }
   }
 });
 
-// B. READ INITIAL STATE: Listen to Control States to sync UI switches
-onValue(ref(db, 'SCADA/Controls'), (snapshot) => {
+// B. READ: Listen to Modbus Analog for Chart (A1 & A2)
+onValue(ref(db, 'SCADA/Analog'), (snapshot) => {
   const data = snapshot.val();
   if (data) {
-    for (let i = 1; i <= 10; i++) {
-      const sw = document.getElementById(`switch-SW${i}`);
-      if (data[`SW${i}`] !== undefined && sw) {
-        sw.checked = (data[`SW${i}`] === 1);
-      }
+    const now = new Date();
+    const timeLabel = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    
+    trendChart.data.labels.push(timeLabel);
+    trendChart.data.datasets[0].data.push(data.A1 || 0);
+    trendChart.data.datasets[1].data.push(data.A2 || 0);
+
+    if (trendChart.data.labels.length > MAX_DATA_POINTS) {
+      trendChart.data.labels.shift();
+      trendChart.data.datasets[0].data.shift();
+      trendChart.data.datasets[1].data.shift();
     }
+    trendChart.update();
   }
 });
 
-// C. WRITE: Send Toggle Actions to Firebase
-for (let i = 1; i <= 10; i++) {
-  const sw = document.getElementById(`switch-SW${i}`);
-  sw.addEventListener('change', (e) => {
-    set(ref(db, `SCADA/Controls/SW${i}`), e.target.checked ? 1 : 0);
-  });
+// C. WRITE: Pushbutton Events (1 when pressed, 0 when released)
+for (let i = 1; i <= 5; i++) {
+  const btn = document.getElementById(`btn-BTN${i}`);
+  if (btn) {
+    // Mouse Events (PC)
+    btn.addEventListener('mousedown', () => {
+      btn.classList.add('active');
+      set(ref(db, `SCADA/Controls/BTN${i}`), 1);
+    });
+    btn.addEventListener('mouseup', () => {
+      btn.classList.remove('active');
+      set(ref(db, `SCADA/Controls/BTN${i}`), 0);
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.classList.remove('active');
+      set(ref(db, `SCADA/Controls/BTN${i}`), 0);
+    });
+    
+    // Touch Events (Mobile)
+    btn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      btn.classList.add('active');
+      set(ref(db, `SCADA/Controls/BTN${i}`), 1);
+    });
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      btn.classList.remove('active');
+      set(ref(db, `SCADA/Controls/BTN${i}`), 0);
+    });
+  }
 }
