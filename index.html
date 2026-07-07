@@ -39,11 +39,24 @@
 
       <!-- Analog Chart Section -->
       <section class="glass-panel widget chart-widget">
-        <h2>Analog Monitor (Suhu / Potensio)</h2>
+        <h2>SCADA Monitoring Analog</h2>
         <p class="subtitle">Modbus Address 15 - 16</p>
+        
+        <div class="analog-tiles">
+          <div class="tile">
+            <div class="label">Analog 1 (A1)</div>
+            <div id="a1Val" class="value">--</div>
+          </div>
+          <div class="tile">
+            <div class="label">Analog 2 (A2)</div>
+            <div id="a2Val" class="value">--</div>
+          </div>
+        </div>
+
         <div class="chart-container">
           <canvas id="trendChart"></canvas>
         </div>
+        <div class="footer">Last update: <span id="ts">-</span></div>
       </section>
     </main>
   </div>

@@ -125,9 +125,20 @@ onValue(ref(db, 'SCADA/Analog'), (snapshot) => {
     const now = new Date();
     const timeLabel = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
     
+    // Update large numbers
+    const a1 = data.A1 || 0;
+    const a2 = data.A2 || 0;
+    const a1El = document.getElementById('a1Val');
+    const a2El = document.getElementById('a2Val');
+    const tsEl = document.getElementById('ts');
+    
+    if(a1El) a1El.textContent = a1;
+    if(a2El) a2El.textContent = a2;
+    if(tsEl) tsEl.textContent = now.toLocaleString();
+
     trendChart.data.labels.push(timeLabel);
-    trendChart.data.datasets[0].data.push(data.A1 || 0);
-    trendChart.data.datasets[1].data.push(data.A2 || 0);
+    trendChart.data.datasets[0].data.push(a1);
+    trendChart.data.datasets[1].data.push(a2);
 
     if (trendChart.data.labels.length > MAX_DATA_POINTS) {
       trendChart.data.labels.shift();

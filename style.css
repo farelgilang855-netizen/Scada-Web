@@ -185,3 +185,32 @@ h2 {
   height: 300px;
   width: 100%;
 }
+
+/* Analog Tiles */
+.analog-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.tile {
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 14px;
+}
+.tile .label {
+  font-size: 12px;
+  color: #94a3b8;
+}
+.tile .value {
+  font-size: 38px;
+  font-weight: 700;
+  margin-top: 6px;
+  color: #f8fafc;
+}
+.footer {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 12px;
+}
